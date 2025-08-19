@@ -1,0 +1,23 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.product-details-text {
+  width: 75% !important;
+}
+
+.product-details-img {
+  width: 25% !important;
+}
+
+@media screen and (max-width: 768px) {
+  .product-card-body {
+    flex-direction: column;
+  }
+  .product-details-text .product-details-img {
+    width: 100% !important;
+  }
+}

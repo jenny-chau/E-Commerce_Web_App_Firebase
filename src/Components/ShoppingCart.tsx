@@ -7,12 +7,13 @@ import CartItemCard from "./CartItemCard";
 import CheckoutButton from "./CheckoutButton";
 
 const ShoppingCart: React.FC = () => {
+    // Handle showing the shopping cart
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const cart = useSelector((state: RootState) => state.cart);
+    const cart = useSelector((state: RootState) => state);
     const dispatch = useDispatch<AppDispatch>();
 
     const handleCartClear = () => {

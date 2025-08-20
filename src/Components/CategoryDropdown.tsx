@@ -10,7 +10,8 @@ const fetchCategories = async (): Promise<string[]> => {
 };
 
 const CategoryDropdown: React.FC = () => {
-    const [selectedCategory, setSelectedCategory] = useState<string>("All");
+    const [selectedCategory, setSelectedCategory] = useState<string>("all");
+    
     const handleSelect = (eventKey: string | null) => {
         if (eventKey) {
             setSelectedCategory(eventKey);
@@ -30,7 +31,7 @@ const CategoryDropdown: React.FC = () => {
             <Container className='d-flex flex-wrap justify-content-center align-items-center m-3'>
                 <p className='mx-3 my-0'>Category:</p>
                 <DropdownButton title={selectedCategory} onSelect={handleSelect} variant="warning">
-                    <Dropdown.Item key={0} eventKey="All">All</Dropdown.Item>
+                    <Dropdown.Item key={0} eventKey="all">all</Dropdown.Item>
                     {data?.map((category: string, index: number) => <Dropdown.Item key={index+1} eventKey={category}>{category}</Dropdown.Item>)}
                 </DropdownButton>
             </Container>

@@ -15,10 +15,9 @@ export type Product = {
     }
 };
 
-// Fetch function
-const fetchProducts = async ({queryKey}): Promise<Product[]> => {
-    const [key, category] = queryKey; 
-    if (category && category != "All") {
+// Fetch products from FakeStoreAPI
+const fetchProducts = async (category: string): Promise<Product[]> => {
+    if (category && category != "all") {
         const response = await axios.get(`https://fakestoreapi.com/products/category/${category}`);
         return response.data;
     }
@@ -31,11 +30,11 @@ const fetchProducts = async ({queryKey}): Promise<Product[]> => {
 interface ProductProps {
     category: string;
 }
-// Using `useQuery` to fetch products
+
 const Products:React.FC<ProductProps> = ({category}) => {
     const { data, isLoading, error } = useQuery<Product[]>({
         queryKey: ['products', category],
-        queryFn: fetchProducts
+        queryFn: () => fetchProducts(category)
     })
 
     if (isLoading) return <p>Loading...</p>;

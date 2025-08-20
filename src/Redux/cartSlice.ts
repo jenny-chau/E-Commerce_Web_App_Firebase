@@ -18,6 +18,10 @@ const initialState: CartState = {
     totalPrice: 0
 };
 
+const storeToSessionStorage = (state: CartState) => {
+    sessionStorage.setItem('shoppingCart', JSON.stringify(state));
+}
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState,
@@ -32,7 +36,8 @@ const cartSlice = createSlice({
                 state.products.push(productToAdd);
             }
             state.totalNumberItems += 1;
-            state.totalPrice += productToAdd.product.price
+            state.totalPrice += productToAdd.product.price;
+            storeToSessionStorage(state);
         },
         removeProduct: (state, action: PayloadAction<Product>) => {
             const existingProductInCart = state.products.find(product => product.product.id === action.payload.id)
@@ -44,6 +49,7 @@ const cartSlice = createSlice({
             state.totalPrice -= existingProductInCart.quantity * existingProductInCart.product.price;
 
             state.products = state.products.filter(products => products.product.id !== action.payload.id);
+            storeToSessionStorage(state);
         },
         decrementProductQuantity: (state, action: PayloadAction<Product>) => {
             const existingProductInCart = state.products.find(product => product.product.id === action.payload.id)
@@ -56,7 +62,9 @@ const cartSlice = createSlice({
                 existingProductInCart.quantity--;
 
                 state.totalNumberItems -= 1;
-                state.totalPrice -= action.payload.price;
+                state.totalPrice -=
+                action.payload.price;
+                storeToSessionStorage(state);
             }
         },
         incrementProductQuantity: (state, action: PayloadAction<Product>) => {
@@ -69,11 +77,13 @@ const cartSlice = createSlice({
 
             state.totalNumberItems += 1;
             state.totalPrice += action.payload.price;
+            storeToSessionStorage(state);
         },
         clearCart: (state) => {
             state.products = [];
             state.totalNumberItems = 0;
             state.totalPrice = 0;
+            storeToSessionStorage(state);
         },
     },
 });

@@ -5,19 +5,10 @@
   text-align: center;
 }
 
-.product-details-text {
-  width: 75% !important;
-}
-
 .product-details-img {
-  width: 25% !important;
+  max-height: 15em;
 }
 
-@media screen and (max-width: 768px) {
-  .product-card-body {
-    flex-direction: column;
-  }
-  .product-details-text .product-details-img {
-    width: 100% !important;
-  }
+.product-details-img-cart {
+  max-height: 10em;
 }

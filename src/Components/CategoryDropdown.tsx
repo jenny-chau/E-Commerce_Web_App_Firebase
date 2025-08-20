@@ -11,7 +11,7 @@ const fetchCategories = async (): Promise<string[]> => {
 
 const CategoryDropdown: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<string>("all");
-    
+
     const handleSelect = (eventKey: string | null) => {
         if (eventKey) {
             setSelectedCategory(eventKey);
@@ -27,7 +27,7 @@ const CategoryDropdown: React.FC = () => {
     if (error) return <p>Error loading products</p>;
 
     return(
-        <Container>
+        <Container fluid className='p-0'>
             <Container className='d-flex flex-wrap justify-content-center align-items-center m-3'>
                 <p className='mx-3 my-0'>Category:</p>
                 <DropdownButton title={selectedCategory} onSelect={handleSelect} variant="warning">

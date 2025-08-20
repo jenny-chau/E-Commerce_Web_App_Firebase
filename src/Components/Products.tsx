@@ -43,7 +43,7 @@ const Products:React.FC<ProductProps> = ({category}) => {
     return (
         <ul className='list-unstyled d-flex flex-wrap'>
             {data?.map(product => (
-            <li key={product.id} className='m-2 w-100'>
+            <li key={product.id} className='my-2 w-100'>
                 <ProductCard {...product} />
             </li>
             ))}

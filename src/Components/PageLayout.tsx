@@ -7,7 +7,7 @@ type PageLayoutProps = {
 
 const PageLayout: React.FC<PageLayoutProps> = ({children}) => {
     return (
-        <Container className='my-5 mx-auto'>
+        <Container className='mt-5 pt-5 mx-auto'>
             <NavBar/>
             {children}
         </Container>

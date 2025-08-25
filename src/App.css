@@ -12,3 +12,8 @@
 .product-details-img-cart {
   max-height: 10em;
 }
+
+.profile_image {
+  max-height: 15em;
+  max-width: 100%;
+}

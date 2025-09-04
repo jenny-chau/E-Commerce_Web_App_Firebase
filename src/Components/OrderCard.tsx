@@ -1,17 +1,36 @@
 import { Card, Col, Row } from "react-bootstrap";
 import type { Order } from "./MyOrdersPage";
 import OrderDetailModal from "./OrderDetailModal";
+import { useEffect, useState } from "react";
 
 export interface OrderCardProps {
     order: Order
 }
 
 const OrderCard: React.FC<OrderCardProps> = ({order}) => {
-    const orderDate = new Date(order.createdAt.seconds*1000 + order.createdAt.nanoseconds/1000000);
+    const [loading, setLoading] = useState<boolean>(order.createdAt ? false : true);
+    const [error, setError] = useState<string>('');
+    const [orderDate, setOrderDate] = useState<Date>();
+    useEffect(() => {
+        try {
+            if (order.createdAt) {
+                setOrderDate(new Date(order.createdAt.seconds*1000 + order.createdAt.nanoseconds/1000000));
+                setLoading(false);
+            }
+        } catch (err) {
+            setError(err.message);
+        }
+    }, [order])
+    
+    if (loading) {
+        return <p>Loading...</p>
+    }
+
+    if (error) {return <p>{error}</p>};
 
     return (
         <>
-        <Card style={{justifySelf: "center"}} className="h-100 shadow-sm p-1 w-50 m-2">
+        <Card style={{justifySelf: "center"}} className="h-100 shadow-sm p-1 w-75 m-2">
             <Card.Body className="">
                 <Row>
                     <Col>
@@ -20,9 +39,9 @@ const OrderCard: React.FC<OrderCardProps> = ({order}) => {
                             <div className='d-flex flex-column my-2'>
                                 <Card.Text className=''><strong>Total Items: </strong>{order.totalItems}</Card.Text>
                                 <Card.Text className=''><strong>Order Total: </strong>${order.totalPrice.toFixed(2)}</Card.Text>
-                                <Card.Text className=''><strong>Order Date: </strong>{orderDate.toDateString()}</Card.Text>
+                                <Card.Text className=''><strong>Order Date: </strong>{orderDate ? orderDate.toDateString() : "Pending"}</Card.Text>
                             </div>
-                            <OrderDetailModal order={order} orderDate={orderDate}/>
+                            {orderDate != null && <OrderDetailModal order={order} orderDate={orderDate}/>}
                         </div>
                     </Col>
                 </Row>

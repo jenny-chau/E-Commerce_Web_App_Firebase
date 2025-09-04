@@ -1,18 +1,42 @@
 import { useState, type FormEvent } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import Register from "./Register";
+import { setProductState } from '../Redux/cartSlice';
+import { doc, getDoc } from "firebase/firestore";
+import type { AppDispatch } from "../Redux/store";
+import { useDispatch } from "react-redux";
 
-const Login = () => {
+
+const Login: React.FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string>('');   
+    const dispatch = useDispatch<AppDispatch>();
     
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
+        setError('');
         try {
             await signInWithEmailAndPassword(auth, email, password);
+            if (auth.currentUser) {
+                        const cartRef = doc(db, "shoppingCart", auth.currentUser.uid);
+                        const cartDoc = await getDoc(cartRef);
+                        if (cartDoc.exists()) {
+                            try {
+                                sessionStorage.setItem('shoppingCart', cartDoc.data().cart);
+                                dispatch(setProductState());
+                            } catch (err: any) {
+                                sessionStorage.setItem('shoppingCart', JSON.stringify({
+                                    products: [],
+                                    totalNumberItems: 0,
+                                    totalPrice: 0
+                                }));
+                                console.log(err);
+                            }
+                        }
+                    }
         } catch (err: any) {
             setError("Error Logging in");
             console.log(err);

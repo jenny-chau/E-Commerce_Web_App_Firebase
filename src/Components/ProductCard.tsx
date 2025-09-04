@@ -3,8 +3,15 @@ import type { Product } from "./Products";
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../Redux/store';
 import { addProduct } from '../Redux/cartSlice';
+import DeleteProduct from "./DeleteProduct";
+import EditProduct from "./EditProduct";
 
-const ProductCard: React.FC<Product> = (product) => {
+interface ProductCardProps {
+    product: Product,
+    showEditButtons: boolean
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({product, showEditButtons}) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleAddProduct = () => {
@@ -26,6 +33,11 @@ const ProductCard: React.FC<Product> = (product) => {
                             <Card.Text className="product-description-text">{product.description}</Card.Text>
                             <Card.Text className="fs-4"> ${product.price.toFixed(2)}</Card.Text>
                             <Button onClick={handleAddProduct}>Add to Cart</Button>
+                            {showEditButtons && <div className='d-flex justify-content-end'>
+                                <EditProduct currentProduct={product}/>
+                                <DeleteProduct productDocID={product.docID}/>
+                            </div>}
+                            
                         </div>
                     </Col>
                 </Row>

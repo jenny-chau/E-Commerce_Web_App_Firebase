@@ -17,7 +17,7 @@ const OrderDetailModalItemCard: React.FC<ProductQuantity> = ({product, quantity}
                             </div>
                     </Col>
                     <Col sm={3} className="d-flex align-items-center justify-content-center">
-                        <Card.Text className='m-0 mx-2 align-self-center'>Quantity: {quantity}</Card.Text>
+                        <Card.Text className='m-0 mx-2 align-self-center'><small>Quantity:</small> {quantity}</Card.Text>
                     </Col>
                 </Row>
             </Card.Body>

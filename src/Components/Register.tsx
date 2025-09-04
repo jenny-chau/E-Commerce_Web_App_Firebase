@@ -3,15 +3,25 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebaseConfig";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { doc, setDoc } from "firebase/firestore";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../Redux/store";
+import { clearCart } from '../Redux/cartSlice';
+
 
 const Register = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
+    const dispatch = useDispatch<AppDispatch>();
 
     const [show, setShow] = useState<boolean>(false);
     const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        setEmail("");
+        setPassword("");
+        setError('');
+    }
 
     const handleRegister = async (e: FormEvent) => {
         e.preventDefault();
@@ -21,6 +31,9 @@ const Register = () => {
             if (user) {
                 const userRef = doc(db, "users", user.uid); 
                 await setDoc(userRef, {email: email, displayName: "", phoneNumber: "", photoURL: "", address: ""});
+                const cartRef = doc(db, "shoppingCart", user.uid); 
+                dispatch(clearCart());
+                await setDoc(cartRef, {cart: sessionStorage.getItem('shoppingCart')});
                 setEmail("");
                 setPassword("");
                 alert("Registration successful!");

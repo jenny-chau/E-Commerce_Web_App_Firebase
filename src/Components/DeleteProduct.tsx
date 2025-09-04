@@ -1,50 +1,45 @@
 import { Button, Modal } from "react-bootstrap";
-import { auth, db } from "../firebaseConfig";
-import { deleteUser, signOut } from "firebase/auth";
+import { db } from "../firebaseConfig";
 import {deleteDoc, doc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+export interface DeleteProductProps {
+    productDocID: string;
+    handleParentClose?: () => void;
+}
 
-const DeleteAccount: React.FC = () => {
+const DeleteProduct: React.FC<DeleteProductProps> = ({productDocID, handleParentClose}) => {
     const [show, setShow] = useState<boolean>(false);
 
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
-    const user = auth.currentUser;
-    const navigate = useNavigate();
-    
     const handleDelete = async () => {
-        if (user) {
-            try {
-                await deleteDoc(doc(db, "users", user.uid))
-                await deleteUser(user);
-                await signOut(auth);
-                handleClose();
-                navigate("/");
-            } catch (err: any) {
-                console.log(err.message);
+        try {
+            await deleteDoc(doc(db, "products", productDocID))
+            handleClose();
+            if (handleParentClose) {
+                handleParentClose();
             }
-        } else {
-            console.log("No user to delete");
+        } catch (err: any) {
+            console.log(err.message);
         }
     }
 
     return (
         <>
-            <Button variant='danger' onClick={handleShow}>Delete Account</Button>
+            <Button variant='danger' onClick={handleShow} className='mx-2'>Delete</Button>
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Delete Confirmation</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to delete your account?</Modal.Body>
+                <Modal.Body>Are you sure you want to delete this product?</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose} className='m-1'>
-                        No, take me back!
+                        No, keep it!
                     </Button>
                     <Button variant="danger" onClick={handleDelete} className='m-1'>
-                        Yes
+                        Yes!
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -52,4 +47,4 @@ const DeleteAccount: React.FC = () => {
     )
 }
 
-export default DeleteAccount;
+export default DeleteProduct;

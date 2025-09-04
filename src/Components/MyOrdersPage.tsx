@@ -1,6 +1,6 @@
 import PageLayout from "./PageLayout";
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, Timestamp, where } from "firebase/firestore";
+import { collection, onSnapshot, query, Timestamp, where } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig";
 import type { ProductQuantity } from "../Redux/cartSlice";
 import OrderCard from "./OrderCard";
@@ -19,30 +19,37 @@ export interface Order {
 const MyOrdersPage: React.FC = () => {
     const user = auth.currentUser;
     const [orders, setOrders] = useState<Order[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>('');
     
     useEffect(() => {
-        setOrders([]);
-        const fetchData = async () => {
-            if (user){
-                const q = query(collection(db, "orders"), where("uid", "==", user.uid));
-                const querySnapshot = await getDocs(q);
-                querySnapshot.forEach((doc) => {
-                    const nextOrder: Order = {
-                        ...doc.data(),
-                        orderID: doc.id
-                    }
-                    setOrders(prev => [...prev, nextOrder]);
-                });
-            }
-        };
-        fetchData();
-    }, [])
+        if (user){
+            const ordersRef = query(collection(db, "orders"), where("uid", "==", user.uid));
+        
+            const unsubscribe = onSnapshot(ordersRef, (snapshot) => {
+                const dataArray = snapshot.docs.map((doc) => ({
+                    ...doc.data(),
+                })) as Order[];
 
+                if (dataArray.length === 0) {setError("No orders found")}
+                else {setError("")};
+                
+                setOrders(dataArray);
+                setLoading(false);
+            
+                return () => unsubscribe();
+            })
+        } else {
+            setError("No user found");
+        }
+    }, [user])
 
     return (
         <PageLayout>
             <h1 className='mb-5'>My Orders</h1>
-            {orders.sort((a,b)=>b.orderNumber-a.orderNumber).map((order, index) => 
+            {loading && <p>Loading...</p>}
+            {error && <p>{error}</p>}
+            {orders.sort((a,b)=>b.orderNumber-a.orderNumber).map((order, index) => // sort orders in descending order
             <div key={index}>
                 <OrderCard order={order}/>
             </div>

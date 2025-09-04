@@ -20,7 +20,7 @@ const NavBar: React.FC = () => {
                 <Navbar.Toggle aria-controls="navbar"/>
                     <Navbar.Collapse id="navbar" className="justify-content-start">
                         <Nav className="p-1 fs-5 d-flex align-items-center">
-                            <Nav.Link className="px-3" as={NavLink} to="/">Home</Nav.Link>
+                            <Nav.Link className="px-3" as={NavLink} to="/">Shop</Nav.Link>
                             {user && 
                                 <>
                                     <Nav.Link className="px-3" as={NavLink} to="/myOrders">My Orders</Nav.Link>

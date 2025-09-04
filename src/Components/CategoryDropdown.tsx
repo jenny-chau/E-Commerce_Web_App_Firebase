@@ -1,41 +1,65 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useState } from "react";
-import { Container, Dropdown, DropdownButton } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Col, Container, Dropdown, DropdownButton } from "react-bootstrap";
 import Products from "./Products";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../firebaseConfig";
+import AddProduct from "./AddProduct";
 
-const fetchCategories = async (): Promise<string[]> => {
-    const response = await axios.get('https://fakestoreapi.com/products/categories');
-    return response.data;
-};
+export interface Category {
+    category: string;
+}
 
 const CategoryDropdown: React.FC = () => {
-    const [selectedCategory, setSelectedCategory] = useState<string>("all");
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [selectedCategory, setSelectedCategory] = useState<string>("All");
+    const [showEditButtons, setShowEditButtons] = useState<boolean>(false);
+        
+    useEffect(() => {
+        // Get categories from category collection
+        const categoriesRef = collection(db, 'categories')
+        const unsubscribe = onSnapshot(categoriesRef, (snapshot) => {
+            const dataArray = snapshot.docs.map((doc) => ({
+                ...doc.data(),
+            })) as Category[];
+
+            setCategories(dataArray);
+            setLoading(false);
+
+            return () => unsubscribe();
+    })}, []);
+        
+    if (loading) return <p>Loading...</p>;
 
     const handleSelect = (eventKey: string | null) => {
-        if (eventKey) {
-            setSelectedCategory(eventKey);
+        if (eventKey === null) {
+            return
         }
+        setSelectedCategory(eventKey);
     }
 
-    const { data, isLoading, error } = useQuery<string[]>({
-        queryKey: ['categories'],
-        queryFn: fetchCategories
-    })
-
-    if (isLoading) return <p>Loading...</p>;
-    if (error) return <p>Error loading products</p>;
+    const handleShowEditButtons = () => {
+        setShowEditButtons(showEditButtons ? false : true);
+    }
 
     return(
         <Container fluid className='p-0'>
             <Container className='d-flex flex-wrap justify-content-center align-items-center m-3'>
                 <p className='mx-3 my-0'>Category:</p>
-                <DropdownButton title={selectedCategory} onSelect={handleSelect} variant="warning">
-                    <Dropdown.Item key={0} eventKey="all">all</Dropdown.Item>
-                    {data?.map((category: string, index: number) => <Dropdown.Item key={index+1} eventKey={category}>{category}</Dropdown.Item>)}
+                <DropdownButton title={selectedCategory} onSelect={handleSelect} variant="success">
+                    <Dropdown.Item key={0} eventKey="All">All</Dropdown.Item>
+                    {categories.map((category: Category, index: number) => <Dropdown.Item key={index+1} eventKey={category.category}>{category.category}</Dropdown.Item>)}
                 </DropdownButton>
             </Container>
-            <Products category={selectedCategory}/>
+            <Container className='mb-5 pb-5'>
+                <Products category={selectedCategory} showEditButtons={showEditButtons}/>
+            </Container>
+            <Container fluid className='fixed-bottom justify-content-end m-2 w-100'>
+                <Col sm={2} style={{justifySelf: "end"}}>
+                <AddProduct />
+                <Button className='m-2' variant='warning' onClick={handleShowEditButtons}>Edit Products</Button>
+                </Col>
+            </Container>
         </Container>
     )
 }

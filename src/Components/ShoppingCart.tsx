@@ -13,8 +13,9 @@ const ShoppingCart: React.FC = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const cart = useSelector((state: RootState) => state);
     const dispatch = useDispatch<AppDispatch>();
+
+    const cart = useSelector((state:RootState) => state);
 
     const handleCartClear = () => {
         dispatch(clearCart());
@@ -35,12 +36,12 @@ const ShoppingCart: React.FC = () => {
                 <Offcanvas.Title>Shopping Cart</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    {cart.products?.map((productQuantity, index) => (
+                    {cart?.products?.map((productQuantity, index) => (
                         <CartItemCard key={index} {...productQuantity} />
                     ))}
                 </Offcanvas.Body>
                 <Container className='d-flex flex-column mt-3'>
-                    <p className='align-self-center'>Total: ${cart.totalPrice.toFixed(2)}</p>
+                    <p className='align-self-center'>Total: ${cart.totalPrice.toFixed(2) || 'loading'}</p>
                     <div className='d-flex justify-content-between m-2'>
                         <Button onClick={handleCartClear} variant='outline-secondary' size="sm">Clear</Button>
                         <CheckoutButton callback={handleClose}/>

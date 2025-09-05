@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { Product } from '../Components/Products';
+import type { Product } from '../Components/Products/Products';
 
 export interface ProductQuantity {
     product: Product,
@@ -18,6 +18,7 @@ const initialState: CartState = {
     totalPrice: 0
 };
 
+// Update session storage data
 const storeToSession = (state: CartState) => {
     sessionStorage.setItem('shoppingCart', JSON.stringify(state));
 }

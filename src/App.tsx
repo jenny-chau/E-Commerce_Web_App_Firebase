@@ -4,14 +4,15 @@ import "./App.css"
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth } from './firebaseConfig';
-import Profile from './Components/Profile';
+import Profile from './Components/User/Profile';
 import UserContext from './Components/UserContext';
-import MyOrdersPage from './Components/MyOrdersPage';
+import MyOrdersPage from './Components/Orders/MyOrdersPage';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true); // wait for auth to finish loading before rendering the rest of the app
 
+    // Set up listener for user authentication state
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);

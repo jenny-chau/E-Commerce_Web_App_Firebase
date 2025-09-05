@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../Redux/store';
-import { clearCart } from '../Redux/cartSlice';
-import { addDoc, collection, getDocs, query, serverTimestamp, Timestamp, where } from 'firebase/firestore';
-import { auth, db } from '../firebaseConfig';
-import Login from './Login';
+import type { AppDispatch, RootState } from '../../Redux/store';
+import { clearCart } from '../../Redux/cartSlice';
+import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore';
+import { auth, db } from '../../firebaseConfig';
+import Login from '../User/Login';
 
 interface CheckoutButtonProps {
     callback: () => void;
@@ -25,7 +25,7 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({callback}) => {
     }
     const handleCheckout = async () => {
         if (cart.products.length == 0) {
-            callback(); // closes the shopping cart without showing successful checkout modal
+            callback(); // closes the shopping cart without showing the 'successfully checked out' message
         }
         else if (cart.products.length > 0) {
             if (user) {

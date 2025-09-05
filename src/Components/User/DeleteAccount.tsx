@@ -1,5 +1,5 @@
 import { Button, Modal } from "react-bootstrap";
-import { auth, db } from "../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 import { deleteUser, signOut } from "firebase/auth";
 import {deleteDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -18,8 +18,10 @@ const DeleteAccount: React.FC = () => {
     const handleDelete = async () => {
         if (user) {
             try {
-                await deleteDoc(doc(db, "users", user.uid))
-                await deleteUser(user);
+                await deleteDoc(doc(db, "users", user.uid)) // delete document from Firestore
+                await deleteUser(user); // delete user from firebase
+                
+                // sign out and navigate back to login/register page
                 await signOut(auth);
                 handleClose();
                 navigate("/");

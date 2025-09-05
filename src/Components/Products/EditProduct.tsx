@@ -1,16 +1,16 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { db } from "../firebaseConfig";
-import DeleteProduct from "./DeleteProduct";
+import { db } from "../../firebaseConfig";
 import type { Product } from "./Products";
 import ProductForm from "./ProductForm";
 
 export interface EditProductProps {
-    currentProduct: Product;
+    currentProduct: Product,
+    alertCallback: (message: string) => void
 }
 
-const EditProduct: React.FC<EditProductProps> = ({currentProduct}) => {
+const EditProduct: React.FC<EditProductProps> = ({currentProduct, alertCallback}) => {
     const submitButton = (
         <Button variant="warning" type="submit">
             Edit
@@ -27,6 +27,7 @@ const EditProduct: React.FC<EditProductProps> = ({currentProduct}) => {
             const ref = doc(db, "products", product.docID);
             await updateDoc(ref, {...product})
             handleClose();
+            alertCallback(`Successfully updated ${product.title}`);
         } catch (err: any) {
             console.log(err.message);
         }
@@ -34,7 +35,7 @@ const EditProduct: React.FC<EditProductProps> = ({currentProduct}) => {
 
     return (
         <>
-            <Button className='mx-2' variant='warning' onClick={handleShow}>Edit</Button>
+            <Button className='mx-2 mt-1' variant='warning' onClick={handleShow}>Edit</Button>
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Edit Product Details</Modal.Title>

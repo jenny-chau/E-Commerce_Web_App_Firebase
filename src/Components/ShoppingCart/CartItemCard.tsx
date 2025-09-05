@@ -1,7 +1,7 @@
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { useDispatch } from 'react-redux';
-import type { AppDispatch } from '../Redux/store';
-import { removeProduct, decrementProductQuantity, incrementProductQuantity, type ProductQuantity } from '../Redux/cartSlice';
+import type { AppDispatch } from '../../Redux/store';
+import { removeProduct, decrementProductQuantity, incrementProductQuantity, type ProductQuantity } from '../../Redux/cartSlice';
 
 const CartItemCard: React.FC<ProductQuantity> = ({product, quantity}) => {
     const dispatch = useDispatch<AppDispatch>();

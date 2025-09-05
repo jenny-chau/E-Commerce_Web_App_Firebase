@@ -1,11 +1,15 @@
 import { addDoc, collection, updateDoc } from "firebase/firestore";
-import { useState, type ReactHTMLElement } from "react";
+import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { db } from "../firebaseConfig";
+import { db } from "../../firebaseConfig";
 import type { Product } from "./Products";
 import ProductForm from "./ProductForm";
 
-const AddProduct: React.FC = () => {
+interface AddProductProps {
+    callback: (message: string) => void;
+}
+
+const AddProduct: React.FC<AddProductProps> = ({callback}) => {
     const [show, setShow] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     
@@ -25,8 +29,8 @@ const AddProduct: React.FC = () => {
         try {
             const ref = await addDoc(collection(db, 'products'), {...product});
             await updateDoc(ref, {docID: ref.id});
-            alert("Product added!");
             handleHide();
+            callback('Successfully added product!');
         } catch (err: any) {
             setError(err.message);
         }

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, Container, Offcanvas } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
-import type { RootState, AppDispatch } from '../Redux/store';
-import { clearCart } from '../Redux/cartSlice';
+import type { RootState, AppDispatch } from '../../Redux/store';
+import { clearCart } from '../../Redux/cartSlice';
 import CartItemCard from "./CartItemCard";
 import CheckoutButton from "./CheckoutButton";
 

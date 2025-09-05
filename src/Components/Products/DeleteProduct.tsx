@@ -1,14 +1,15 @@
 import { Button, Modal } from "react-bootstrap";
-import { db } from "../firebaseConfig";
+import { db } from "../../firebaseConfig";
 import {deleteDoc, doc } from "firebase/firestore";
 import { useState } from "react";
 
 export interface DeleteProductProps {
     productDocID: string;
     handleParentClose?: () => void;
+    alertCallback: (message: string) => void;
 }
 
-const DeleteProduct: React.FC<DeleteProductProps> = ({productDocID, handleParentClose}) => {
+const DeleteProduct: React.FC<DeleteProductProps> = ({productDocID, handleParentClose, alertCallback}) => {
     const [show, setShow] = useState<boolean>(false);
 
     const handleShow = () => setShow(true);
@@ -21,6 +22,7 @@ const DeleteProduct: React.FC<DeleteProductProps> = ({productDocID, handleParent
             if (handleParentClose) {
                 handleParentClose();
             }
+            alertCallback("Product Deleted");
         } catch (err: any) {
             console.log(err.message);
         }
@@ -28,7 +30,7 @@ const DeleteProduct: React.FC<DeleteProductProps> = ({productDocID, handleParent
 
     return (
         <>
-            <Button variant='danger' onClick={handleShow} className='mx-2'>Delete</Button>
+            <Button variant='danger' onClick={handleShow} className='mx-2 mt-1'>Delete</Button>
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Delete Confirmation</Modal.Title>

@@ -1,8 +1,8 @@
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState, type ChangeEvent, type FormEvent, type ReactElement } from "react";
-import { Form, Row, Col, Button, Image } from "react-bootstrap";
-import { db } from "../firebaseConfig";
-import type { Category } from "./CategoryDropdown";
+import { Form, Row, Col, Image } from "react-bootstrap";
+import { db } from "../../firebaseConfig";
+import type { Category } from "../CategoryDropdown";
 import type { Product } from "./Products";
 
 interface ProductFormProps {
@@ -64,7 +64,7 @@ const ProductForm: React.FC<ProductFormProps> = ({callback, existingProduct, sub
             setLoading(false);
 
             return () => unsubscribe();
-    })}, []);
+    })}, [existingProduct]);
 
     const handleAddProduct = async (e: FormEvent) => {
             e.preventDefault();
@@ -76,7 +76,6 @@ const ProductForm: React.FC<ProductFormProps> = ({callback, existingProduct, sub
                 setShowCustomInput(false);
                 setCustomCategory('');
                 setError('');
-                console.log(product)
                 callback({...product});
             } catch (err: any) {
                 setError(err.message);

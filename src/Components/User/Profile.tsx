@@ -1,7 +1,7 @@
 import type React from "react";
-import PageLayout from "./PageLayout";
-import { auth, db } from "../firebaseConfig";
-import { Container, Row, Col, Button, Form, Image } from "react-bootstrap";
+import PageLayout from "../PageLayout";
+import { auth, db } from "../../firebaseConfig";
+import { Container, Row, Col, Button, Form, Image, Alert } from "react-bootstrap";
 import { useEffect, useState, type FormEvent } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import DeleteAccount from "./DeleteAccount";
@@ -15,6 +15,7 @@ interface UpdateProfileKeys {
 
 const Profile: React.FC = () => {
     const user = auth.currentUser;
+
     const [name, setName] = useState<string>("");
     const [address, setAddress] = useState<string>("");
     const [phoneNum, setPhoneNum] = useState<string>("");
@@ -22,21 +23,26 @@ const Profile: React.FC = () => {
     const [isValid, setIsValid] = useState<boolean>(true);
     const [isFormDisabled, setIsFormDisabled] = useState<boolean>(true);
 
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+
+    const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
-    const fetchData = async () => {
-        if (user){
-            const querySnapshot = await getDoc(doc(db, 'users', user.uid));
-            if (querySnapshot.exists()) {
-                const dataArray = {...querySnapshot.data()};
-                setName(dataArray.displayName);
-                setPhoneNum(dataArray.phoneNumber);
-                setPhotoURL(dataArray.photoURL);
-                setAddress(dataArray.address);
-            } else {
-                console.log("No such document!");
+        // Get profile data from Firestore
+        const fetchData = async () => {
+            if (user){
+                const querySnapshot = await getDoc(doc(db, 'users', user.uid));
+                if (querySnapshot.exists()) {
+                    const dataArray = {...querySnapshot.data()};
+                    setName(dataArray.displayName);
+                    setPhoneNum(dataArray.phoneNumber);
+                    setPhotoURL(dataArray.photoURL);
+                    setAddress(dataArray.address);
+                } else {
+                    console.log("No such document!");
+                }
             }
-        }
-    };
+        };
         fetchData();
     }, []);
 
@@ -50,16 +56,17 @@ const Profile: React.FC = () => {
         setIsValid(phoneRegex.test(newPhoneNumber));
         if (newPhoneNumber == "") {setIsValid(true)};
     };
-
-    const [error, setError] = useState<string | null>(null);
         
     const handleUpdate = async (e: FormEvent) => {
         e.preventDefault();        
         if (user) {
             try {
+                // Check if phone number is valid
                 if (!isValid) {
                     throw error;
                 }
+
+                // update user profile in Firestore
                 const updatedUser: UpdateProfileKeys = {
                     displayName: name,
                     photoURL: photoURL,
@@ -68,9 +75,16 @@ const Profile: React.FC = () => {
                 }
                 const userDoc = doc(db, 'users', user.uid);
                 await updateDoc(userDoc, {...updatedUser});
+
+                // Reset state
                 setIsFormDisabled(true);
                 setError("");
-                alert("Successfully updated!");
+
+                // Show success alert for 5 seconds (or user's can manually close the alert)
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                }, 5000)
             } catch (err: any) { 
                 setError("Error Updating Profile");
                 console.log(err);
@@ -82,6 +96,8 @@ const Profile: React.FC = () => {
         <PageLayout>
             {user ? 
                 <>
+                {showAlert && <Alert variant='success' dismissible onClose={()=>setShowAlert(false)} className='alert fixed-top'>Successfully updated user profile!</Alert>}
+
                 <h2>Profile</h2>
                 <Container className='col-md-6'>
                     <Form onSubmit={handleUpdate}>

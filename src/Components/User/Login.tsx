@@ -1,11 +1,11 @@
 import { useState, type FormEvent } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import Register from "./Register";
-import { setProductState } from '../Redux/cartSlice';
+import { setProductState } from '../../Redux/cartSlice';
 import { doc, getDoc } from "firebase/firestore";
-import type { AppDispatch } from "../Redux/store";
+import type { AppDispatch } from "../../Redux/store";
 import { useDispatch } from "react-redux";
 
 
@@ -21,22 +21,24 @@ const Login: React.FC = () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             if (auth.currentUser) {
-                        const cartRef = doc(db, "shoppingCart", auth.currentUser.uid);
-                        const cartDoc = await getDoc(cartRef);
-                        if (cartDoc.exists()) {
-                            try {
-                                sessionStorage.setItem('shoppingCart', cartDoc.data().cart);
-                                dispatch(setProductState());
-                            } catch (err: any) {
-                                sessionStorage.setItem('shoppingCart', JSON.stringify({
-                                    products: [],
-                                    totalNumberItems: 0,
-                                    totalPrice: 0
-                                }));
-                                console.log(err);
-                            }
-                        }
+                // Load shopping cart data from Firestore to session storage
+                const cartRef = doc(db, "shoppingCart", auth.currentUser.uid);
+                const cartDoc = await getDoc(cartRef);
+                if (cartDoc.exists()) {
+                    try {
+                        sessionStorage.setItem('shoppingCart', cartDoc.data().cart);
+                        dispatch(setProductState());
+                    } catch (err: any) {
+                        // If there's an error, set session storage to an empty cart
+                        sessionStorage.setItem('shoppingCart', JSON.stringify({
+                            products: [],
+                            totalNumberItems: 0,
+                            totalPrice: 0
+                        }));
+                        console.log(err);
                     }
+                }
+            }
         } catch (err: any) {
             setError("Error Logging in");
             console.log(err);

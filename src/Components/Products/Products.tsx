@@ -1,7 +1,7 @@
 import ProductCard from './ProductCard';
 import { useEffect, useState } from 'react';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { db } from '../../firebaseConfig';
 
 export type Product = {
     "docID": string;
@@ -19,13 +19,16 @@ export type Product = {
 interface ProductProps {
     category: string;
     showEditButtons: boolean;
+    alertCallback: (message: string) => void;
 }
 
-const Products:React.FC<ProductProps> = ({category, showEditButtons}) => {
+const Products:React.FC<ProductProps> = ({category, showEditButtons, alertCallback}) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [noProducts, setNoProducts] = useState<boolean>(true);
 
     useEffect(() => {
+        setNoProducts(true);
         let productsRef;
         if (category == 'All') {
             productsRef = collection(db, 'products');
@@ -40,6 +43,9 @@ const Products:React.FC<ProductProps> = ({category, showEditButtons}) => {
                 ...doc.data(),
             })) as Product[];
 
+            if (dataArray.length != 0) {
+                setNoProducts(false);
+            }
             setProducts(dataArray);
             setLoading(false);
 
@@ -47,12 +53,13 @@ const Products:React.FC<ProductProps> = ({category, showEditButtons}) => {
     })}, [category]); // Reruns useEffect when category changes
         
     if (loading) return <p>Loading...</p>;
+    if (noProducts) return <p>No Products Found</p>;
 
     return (
         <ul className='list-unstyled d-flex flex-wrap'>
             {products.map((product, index) => (
             <li key={index} className='my-2 w-100'>
-                <ProductCard product={product} showEditButtons={showEditButtons}/>
+                <ProductCard product={product} showEditButtons={showEditButtons} alertCallback={alertCallback}/>
             </li>
             ))}
         </ul>

@@ -1,17 +1,18 @@
 import { Button, Card, Col, Row } from "react-bootstrap";
 import type { Product } from "./Products";
 import { useDispatch } from 'react-redux';
-import type { AppDispatch } from '../Redux/store';
-import { addProduct } from '../Redux/cartSlice';
+import type { AppDispatch } from '../../Redux/store';
+import { addProduct } from '../../Redux/cartSlice';
 import DeleteProduct from "./DeleteProduct";
 import EditProduct from "./EditProduct";
 
 interface ProductCardProps {
     product: Product,
-    showEditButtons: boolean
+    showEditButtons: boolean,
+    alertCallback: (message: string) => void
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({product, showEditButtons}) => {
+const ProductCard: React.FC<ProductCardProps> = ({product, showEditButtons, alertCallback}) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleAddProduct = () => {
@@ -33,9 +34,9 @@ const ProductCard: React.FC<ProductCardProps> = ({product, showEditButtons}) => 
                             <Card.Text className="product-description-text">{product.description}</Card.Text>
                             <Card.Text className="fs-4"> ${product.price.toFixed(2)}</Card.Text>
                             <Button onClick={handleAddProduct}>Add to Cart</Button>
-                            {showEditButtons && <div className='d-flex justify-content-end'>
-                                <EditProduct currentProduct={product}/>
-                                <DeleteProduct productDocID={product.docID}/>
+                            {showEditButtons && <div className='d-flex flex-wrap edit-buttons'>
+                                <EditProduct currentProduct={product} alertCallback={alertCallback}/>
+                                <DeleteProduct productDocID={product.docID} alertCallback={alertCallback}/>
                             </div>}
                             
                         </div>

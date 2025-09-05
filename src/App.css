@@ -17,3 +17,23 @@
   max-height: 15em;
   max-width: 100%;
 }
+
+.alert {
+  margin: 7rem 2rem;
+}
+
+.edit-buttons {
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 768px) {
+  .alert {
+    margin: 5rem 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .edit-buttons {
+    justify-content: center;
+  }
+}

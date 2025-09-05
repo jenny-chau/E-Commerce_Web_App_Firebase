@@ -1,9 +1,9 @@
 import {Container, Nav, Navbar} from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
-import ShoppingCart from "./ShoppingCart";
+import ShoppingCart from "./ShoppingCart/ShoppingCart";
 import UserContext from "./UserContext";
 import { useContext } from "react";
-import LogoutButton from "./LogoutButton";
+import LogoutButton from "./User/LogoutButton";
 
 const NavBar: React.FC = () => {
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ const NavBar: React.FC = () => {
     };
 
     return (
-        <Navbar expand="lg" fixed="top" bg='light' variant='light'>
+        <Navbar expand="md" fixed="top" bg='light' variant='light'>
             <Container className='justify-content-between'>
                 <Navbar.Brand onClick={handleBrandClick} className='fs-2'>Coins</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbar"/>

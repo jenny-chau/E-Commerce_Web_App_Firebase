@@ -1,5 +1,5 @@
 import { Card, Col, Row } from "react-bootstrap";
-import type { ProductQuantity } from "../Redux/cartSlice";
+import type { ProductQuantity } from "../../Redux/cartSlice";
 
 const OrderDetailModalItemCard: React.FC<ProductQuantity> = ({product, quantity}) => {
 

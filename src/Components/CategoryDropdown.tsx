@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Dropdown, DropdownButton } from "react-bootstrap";
-import Products from "./Products";
+import { Alert, Button, Container, Dropdown, DropdownButton } from "react-bootstrap";
+import Products from "./Products/Products";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-import AddProduct from "./AddProduct";
+import AddProduct from "./Products/AddProduct";
 
 export interface Category {
     category: string;
@@ -11,13 +11,21 @@ export interface Category {
 
 const CategoryDropdown: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
     const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
     const [showEditButtons, setShowEditButtons] = useState<boolean>(false);
-        
+
+    // show/hide alerts for adding/editing/deleteing products
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [alertMessage, setAlertMessage] = useState<string>('');
+
+    const [loading, setLoading] = useState<boolean>(true);
+
     useEffect(() => {
         // Get categories from category collection
         const categoriesRef = collection(db, 'categories')
+
+        // set up listener to update list of categories when a new category is added
         const unsubscribe = onSnapshot(categoriesRef, (snapshot) => {
             const dataArray = snapshot.docs.map((doc) => ({
                 ...doc.data(),
@@ -31,6 +39,7 @@ const CategoryDropdown: React.FC = () => {
         
     if (loading) return <p>Loading...</p>;
 
+    // Handle user's category selection
     const handleSelect = (eventKey: string | null) => {
         if (eventKey === null) {
             return
@@ -38,12 +47,26 @@ const CategoryDropdown: React.FC = () => {
         setSelectedCategory(eventKey);
     }
 
+    // shows the edit/delete buttons no products when user clicks "Edit Products" button
     const handleShowEditButtons = () => {
         setShowEditButtons(showEditButtons ? false : true);
     }
 
+    // handle showing a success alert 
+    const handleShowAlert = (message: string) => {
+        setAlertMessage(message);
+        setShowAlert(true);
+
+        // show alert of 5 seconds (users may also close the alert manually)
+        setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    }
+
     return(
         <Container fluid className='p-0'>
+            {showAlert && <Alert className='fixed-top alert' variant='success' onClose={()=> setShowAlert(false)} dismissible>{alertMessage}</Alert>}
+
             <Container className='d-flex flex-wrap justify-content-center align-items-center m-3'>
                 <p className='mx-3 my-0'>Category:</p>
                 <DropdownButton title={selectedCategory} onSelect={handleSelect} variant="success">
@@ -52,13 +75,11 @@ const CategoryDropdown: React.FC = () => {
                 </DropdownButton>
             </Container>
             <Container className='mb-5 pb-5'>
-                <Products category={selectedCategory} showEditButtons={showEditButtons}/>
+                <Products category={selectedCategory} showEditButtons={showEditButtons} alertCallback={handleShowAlert}/>
             </Container>
-            <Container fluid className='fixed-bottom justify-content-end m-2 w-100'>
-                <Col sm={2} style={{justifySelf: "end"}}>
-                <AddProduct />
+            <Container fluid className='fixed-bottom justify-content-end bg-light m-0 p-0'>
+                <AddProduct callback={handleShowAlert}/>
                 <Button className='m-2' variant='warning' onClick={handleShowEditButtons}>Edit Products</Button>
-                </Col>
             </Container>
         </Container>
     )

@@ -1,8 +1,8 @@
-import PageLayout from "./PageLayout";
+import PageLayout from "../PageLayout";
 import { useEffect, useState } from "react";
 import { collection, onSnapshot, query, Timestamp, where } from "firebase/firestore";
-import { auth, db } from "../firebaseConfig";
-import type { ProductQuantity } from "../Redux/cartSlice";
+import { auth, db } from "../../firebaseConfig";
+import type { ProductQuantity } from "../../Redux/cartSlice";
 import OrderCard from "./OrderCard";
 
 

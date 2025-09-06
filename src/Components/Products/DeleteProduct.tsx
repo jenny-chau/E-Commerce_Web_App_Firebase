@@ -5,11 +5,10 @@ import { useState } from "react";
 
 export interface DeleteProductProps {
     productDocID: string;
-    handleParentClose?: () => void;
     alertCallback: (message: string) => void;
 }
 
-const DeleteProduct: React.FC<DeleteProductProps> = ({productDocID, handleParentClose, alertCallback}) => {
+const DeleteProduct: React.FC<DeleteProductProps> = ({productDocID, alertCallback}) => {
     const [show, setShow] = useState<boolean>(false);
 
     const handleShow = () => setShow(true);
@@ -19,12 +18,11 @@ const DeleteProduct: React.FC<DeleteProductProps> = ({productDocID, handleParent
         try {
             await deleteDoc(doc(db, "products", productDocID))
             handleClose();
-            if (handleParentClose) {
-                handleParentClose();
-            }
+
+            // callback to show the alert in the CategoryDropdown component 
             alertCallback("Product Deleted");
         } catch (err: any) {
-            console.log(err.message);
+            console.log(err);
         }
     }
 

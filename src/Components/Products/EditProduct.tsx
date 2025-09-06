@@ -11,6 +11,7 @@ export interface EditProductProps {
 }
 
 const EditProduct: React.FC<EditProductProps> = ({currentProduct, alertCallback}) => {
+    // button to use in the ProductForm component (which is also shared with the add product form)
     const submitButton = (
         <Button variant="warning" type="submit">
             Edit
@@ -27,9 +28,11 @@ const EditProduct: React.FC<EditProductProps> = ({currentProduct, alertCallback}
             const ref = doc(db, "products", product.docID);
             await updateDoc(ref, {...product})
             handleClose();
+
+            // callback to show the alert in the CategoryDropdown component 
             alertCallback(`Successfully updated ${product.title}`);
         } catch (err: any) {
-            console.log(err.message);
+            console.log(err);
         }
     }
 

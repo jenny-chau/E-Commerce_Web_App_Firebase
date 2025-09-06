@@ -42,7 +42,15 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({callback}) => {
                     
                     await addDoc(collection(db, 'orders'), {...data, createdAt: serverTimestamp(), orderNumber: querySnapshot.docs.length+1}); //not the best way to set orderNumber, but works since orders can't be deleted by user
                     
+                    // reset redux cart and session storage
                     dispatch(clearCart());
+                    sessionStorage.setItem('shoppingCart', JSON.stringify({
+                        products: [],
+                        totalNumberItems: 0,
+                        totalPrice: 0
+                    }));
+
+                    // show the successfully checked out message
                     setShow(true);
                 } catch (err: any) {
                     console.log(err);

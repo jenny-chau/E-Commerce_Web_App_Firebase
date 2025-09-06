@@ -25,10 +25,14 @@ interface ProductProps {
 const Products:React.FC<ProductProps> = ({category, showEditButtons, alertCallback}) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+
+    // state to determine whether to display the "No product found" message
     const [noProducts, setNoProducts] = useState<boolean>(true);
 
     useEffect(() => {
         setNoProducts(true);
+
+        // determine firestore product reference based on whether a specific category is selected
         let productsRef;
         if (category == 'All') {
             productsRef = collection(db, 'products');
@@ -43,6 +47,7 @@ const Products:React.FC<ProductProps> = ({category, showEditButtons, alertCallba
                 ...doc.data(),
             })) as Product[];
 
+            // hide the "No Products Found" message
             if (dataArray.length != 0) {
                 setNoProducts(false);
             }

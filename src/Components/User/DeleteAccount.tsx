@@ -26,7 +26,7 @@ const DeleteAccount: React.FC = () => {
                 handleClose();
                 navigate("/");
             } catch (err: any) {
-                console.log(err.message);
+                console.log(err);
             }
         } else {
             console.log("No user to delete");

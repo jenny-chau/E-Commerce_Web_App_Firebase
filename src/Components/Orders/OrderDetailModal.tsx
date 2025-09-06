@@ -12,7 +12,6 @@ const OrderDetailModal: React.FC<OrderDetailModalProps> = ({order, orderDate}) =
     const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
     const handleShow = () => setShowDetailModal(true);
     const handleClose = () => setShowDetailModal(false);
-
     
     return(
         <>

@@ -5,7 +5,6 @@ import { auth, db } from "../../firebaseConfig";
 import type { ProductQuantity } from "../../Redux/cartSlice";
 import OrderCard from "./OrderCard";
 
-
 export interface Order {
     uid: string,
     totalPrice: number,
@@ -26,6 +25,7 @@ const MyOrdersPage: React.FC = () => {
         if (user){
             const ordersRef = query(collection(db, "orders"), where("uid", "==", user.uid));
         
+            // setup listener to get the orders from firestore as they are made
             const unsubscribe = onSnapshot(ordersRef, (snapshot) => {
                 const dataArray = snapshot.docs.map((doc) => ({
                     ...doc.data(),

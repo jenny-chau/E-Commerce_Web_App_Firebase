@@ -29,7 +29,7 @@ const LogoutButton: React.FC = () => {
                 navigate("/");
             }
         } catch (err: any) {
-        console.error("Logout error:", err.message);
+        console.error("Logout error:", err);
         }
     };
 

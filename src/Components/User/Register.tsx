@@ -61,7 +61,7 @@ const Register = () => {
                 console.log("No user found")
             }
         } catch (err: any) {
-            setError(err.message);
+            setError(err);
         }
     };
 

@@ -11,21 +11,19 @@ const OrderCard: React.FC<OrderCardProps> = ({order}) => {
     const [loading, setLoading] = useState<boolean>(order.createdAt ? false : true);
     const [error, setError] = useState<string>('');
     const [orderDate, setOrderDate] = useState<Date>();
+
     useEffect(() => {
         try {
             if (order.createdAt) {
                 setOrderDate(new Date(order.createdAt.seconds*1000 + order.createdAt.nanoseconds/1000000));
                 setLoading(false);
             }
-        } catch (err) {
-            setError(err.message);
+        } catch (err: any) {
+            setError(err);
         }
-    }, [order])
+    }, [order]) // rerun useEffect when order changes
     
-    if (loading) {
-        return <p>Loading...</p>
-    }
-
+    if (loading) {return <p>Loading...</p>};
     if (error) {return <p>{error}</p>};
 
     return (

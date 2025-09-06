@@ -14,7 +14,6 @@ const ShoppingCart: React.FC = () => {
     const handleShow = () => setShow(true);
 
     const dispatch = useDispatch<AppDispatch>();
-
     const cart = useSelector((state:RootState) => state);
 
     const handleCartClear = () => {

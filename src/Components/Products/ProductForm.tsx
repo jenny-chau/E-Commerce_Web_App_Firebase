@@ -34,6 +34,7 @@ const ProductForm: React.FC<ProductFormProps> = ({callback, existingProduct, sub
 
     const [product, setProduct] = useState<Product>(initialState);
 
+    // handle category selection
     const handleCategoryDropdown = (e: ChangeEvent<HTMLSelectElement>) => {
         if (e.target.value == "other") {
             setShowCustomInput(true);
@@ -44,16 +45,19 @@ const ProductForm: React.FC<ProductFormProps> = ({callback, existingProduct, sub
         }
     }
 
+    // handle customer category input
     const handleCustomCategoryInput = (e: ChangeEvent<HTMLInputElement>) => {
         setCustomCategory(e.target.value);
         setProduct(prev => ({...prev, category: e.target.value}));
     }
 
     useEffect(() => {
+        // set the product details if there's an existing product for the edit product form
         if (existingProduct) {
             setProduct({...existingProduct});
         }
-        // Get categories from category collection
+
+        // set up a listener to get categories from the category collection and update the category list when a new category is added
         const categoriesRef = collection(db, 'categories')
         const unsubscribe = onSnapshot(categoriesRef, (snapshot) => {
             const dataArray = snapshot.docs.map((doc) => ({
@@ -64,7 +68,7 @@ const ProductForm: React.FC<ProductFormProps> = ({callback, existingProduct, sub
             setLoading(false);
 
             return () => unsubscribe();
-    })}, [existingProduct]);
+    })}, [existingProduct]); // rerun useEffect when the existingProduct changes
 
     const handleAddProduct = async (e: FormEvent) => {
             e.preventDefault();
@@ -73,12 +77,16 @@ const ProductForm: React.FC<ProductFormProps> = ({callback, existingProduct, sub
                 if (customCategory) {
                     await addDoc(collection(db, 'categories'), {category: product.category});
                 }
+
+                // reset the state
                 setShowCustomInput(false);
                 setCustomCategory('');
                 setError('');
+
+                // callback function to add / edit the product to the database
                 callback({...product});
             } catch (err: any) {
-                setError(err.message);
+                setError(err);
             }
         };
     

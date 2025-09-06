@@ -13,6 +13,7 @@ const AddProduct: React.FC<AddProductProps> = ({callback}) => {
     const [show, setShow] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     
+    // button to use in the ProductForm component (which is also shared with the edit product form)
     const submitButton = (
         <Button variant="primary" type="submit">
             Add Product
@@ -21,18 +22,18 @@ const AddProduct: React.FC<AddProductProps> = ({callback}) => {
 
     const handleShow = () => {setShow(true)};
 
-    const handleHide = () => {
-        setShow(false)
-    };
+    const handleHide = () => {setShow(false)};
 
     const handleAddProduct = async (product: Product) => {
         try {
             const ref = await addDoc(collection(db, 'products'), {...product});
             await updateDoc(ref, {docID: ref.id});
             handleHide();
+
+            // callback to show the alert in the CategoryDropdown component 
             callback('Successfully added product!');
         } catch (err: any) {
-            setError(err.message);
+            setError(err);
         }
     };
 

@@ -2,7 +2,6 @@ import { Card, Col, Row } from "react-bootstrap";
 import type { ProductQuantity } from "../../Redux/cartSlice";
 
 const OrderDetailModalItemCard: React.FC<ProductQuantity> = ({product, quantity}) => {
-
     return (
         <Card style={{justifySelf: "center"}} className="p-1 w-100">
             <Card.Body className="text-center p-1">

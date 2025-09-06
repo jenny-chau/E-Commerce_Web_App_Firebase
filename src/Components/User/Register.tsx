@@ -47,6 +47,11 @@ const Register = () => {
                 const cartRef = doc(db, "shoppingCart", user.uid); 
                 dispatch(clearCart()); // clear Redux cart in case not cleared yet
                 await setDoc(cartRef, {cart: JSON.stringify(initialCartState)});
+                sessionStorage.setItem('shoppingCart', JSON.stringify({
+                    products: [],
+                    totalNumberItems: 0,
+                    totalPrice: 0
+                }));
 
                 // reset state
                 setEmail("");

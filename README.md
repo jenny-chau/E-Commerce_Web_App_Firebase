@@ -56,6 +56,6 @@ Coins is an online department store. Users are able to add products to populate 
 
 ## Getting started
 1. Clone this Github repository
-2. Navigate to the "E-Commerce_Web_App" directory
+2. Navigate to the "E-Commerce_Web_App_Firebase" directory
 3. Install dependencies: `npm install`
 4. Start the app with: `npm run dev`

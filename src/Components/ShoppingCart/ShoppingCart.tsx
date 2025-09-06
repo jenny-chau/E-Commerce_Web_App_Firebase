@@ -18,6 +18,11 @@ const ShoppingCart: React.FC = () => {
 
     const handleCartClear = () => {
         dispatch(clearCart());
+        sessionStorage.setItem('shoppingCart', JSON.stringify({
+            products: [],
+            totalNumberItems: 0,
+            totalPrice: 0
+        }));
     }
 
     return (

@@ -18,7 +18,10 @@ const LogoutButton: React.FC = () => {
             if (user) {
                 // update shopping cart in Firestore
                 const ref = doc(db, "shoppingCart", user.uid);
-                await updateDoc(ref, {cart: sessionStorage.getItem('shoppingCart')})
+                
+                if (sessionStorage.getItem('shoppingCart')) {
+                    await updateDoc(ref, {cart: sessionStorage.getItem('shoppingCart')});
+                }
 
                 // Clear cart state in Redux and in session storage
                 dispatch(clearCart());

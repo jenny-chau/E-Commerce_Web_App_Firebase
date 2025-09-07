@@ -6,6 +6,7 @@ import { clearCart } from '../../Redux/cartSlice';
 import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
 import Login from '../User/Login';
+import { updateFirestoreShoppingCart } from './UpdateFirestoreShoppingCart';
 
 interface CheckoutButtonProps {
     callback: () => void;
@@ -49,6 +50,7 @@ const CheckoutButton: React.FC<CheckoutButtonProps> = ({callback}) => {
                         totalNumberItems: 0,
                         totalPrice: 0
                     }));
+                    updateFirestoreShoppingCart();
 
                     // show the successfully checked out message
                     setShow(true);

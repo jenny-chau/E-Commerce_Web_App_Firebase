@@ -5,6 +5,7 @@ import type { AppDispatch } from '../../Redux/store';
 import { addProduct } from '../../Redux/cartSlice';
 import DeleteProduct from "./DeleteProduct";
 import EditProduct from "./EditProduct";
+import { updateFirestoreShoppingCart } from "../ShoppingCart/UpdateFirestoreShoppingCart";
 
 interface ProductCardProps {
     product: Product,
@@ -17,6 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product, showEditButtons, aler
 
     const handleAddProduct = () => {
         dispatch(addProduct(product));
+        updateFirestoreShoppingCart();
     }
 
     return (

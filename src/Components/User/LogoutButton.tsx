@@ -1,27 +1,22 @@
 import { signOut } from "firebase/auth";
 import { Button } from "react-bootstrap";
-import { auth, db } from "../../firebaseConfig";
+import { auth } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { doc, updateDoc } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../Redux/store";
 import { clearCart } from "../../Redux/cartSlice";
+import { updateFirestoreShoppingCart } from "../ShoppingCart/UpdateFirestoreShoppingCart";
 
 const LogoutButton: React.FC = () => {
     const navigate = useNavigate();
     const user = auth.currentUser;
     const dispatch = useDispatch<AppDispatch>();
 
-
     const handleLogout = async () => {
         try {
             if (user) {
                 // update shopping cart in Firestore
-                const ref = doc(db, "shoppingCart", user.uid);
-                
-                if (sessionStorage.getItem('shoppingCart') != null) {
-                    await updateDoc(ref, {cart: sessionStorage.getItem('shoppingCart')});
-                }
+                updateFirestoreShoppingCart();
 
                 // Clear cart state in Redux and in session storage
                 dispatch(clearCart());

@@ -2,20 +2,24 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../../Redux/store';
 import { removeProduct, decrementProductQuantity, incrementProductQuantity, type ProductQuantity } from '../../Redux/cartSlice';
+import { updateFirestoreShoppingCart } from "./UpdateFirestoreShoppingCart";
 
 const CartItemCard: React.FC<ProductQuantity> = ({product, quantity}) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleDeleteProduct = () => {
         dispatch(removeProduct(product));
+        updateFirestoreShoppingCart();
     }
 
     const handleDecrement = () => {
         dispatch(decrementProductQuantity(product))
+        updateFirestoreShoppingCart();
     }
 
     const handleIncrement = () => {
         dispatch(incrementProductQuantity(product))
+        updateFirestoreShoppingCart();
     }
 
     return (

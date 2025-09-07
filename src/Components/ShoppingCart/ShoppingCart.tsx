@@ -5,6 +5,7 @@ import type { RootState, AppDispatch } from '../../Redux/store';
 import { clearCart } from '../../Redux/cartSlice';
 import CartItemCard from "./CartItemCard";
 import CheckoutButton from "./CheckoutButton";
+import { updateFirestoreShoppingCart } from "./UpdateFirestoreShoppingCart";
 
 const ShoppingCart: React.FC = () => {
     // Handle showing the shopping cart
@@ -23,6 +24,7 @@ const ShoppingCart: React.FC = () => {
             totalNumberItems: 0,
             totalPrice: 0
         }));
+        updateFirestoreShoppingCart();
     }
 
     return (

@@ -47,11 +47,12 @@ Coins is an online department store. Users are able to add products to populate 
   - Allows user to log out
   - Shopping cart is saved to Firestore and the session storage is cleared
 
-## Future features (not implemented yet)
+## Future features/updates (not implemented yet)
   - Allow users to update their email and password
   - Order deletion
   - Delete/edit categories
   - Product rating feature
+  - Allow users who are not logged in or registered to shop
   
 
 ## Getting started

@@ -19,7 +19,7 @@ const LogoutButton: React.FC = () => {
                 // update shopping cart in Firestore
                 const ref = doc(db, "shoppingCart", user.uid);
                 
-                if (sessionStorage.getItem('shoppingCart')) {
+                if (sessionStorage.getItem('shoppingCart') != null) {
                     await updateDoc(ref, {cart: sessionStorage.getItem('shoppingCart')});
                 }
 

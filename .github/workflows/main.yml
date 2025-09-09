@@ -1,16 +1,33 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
       - master
-  pull_request:
-    branches:
-      - main
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code 
+        uses: actions/checkout@v2
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm ci 
+      - name: Print debugging Information
+        run: |
+          echo "Node version: $(node --version)"
+          echo "npm version: $(npm --version)"
+          echo "Working directory: $(pwd)"
+          echo "Working directory contents: $(ls -l)"
+          echo "node_modules contents: $(ls -l node_modules)"
+
   test:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,7 +41,7 @@ jobs:
       - name: Run tests
         run: npm test -- --watchAll=false
   
-  Deploy-Production:
+  deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:

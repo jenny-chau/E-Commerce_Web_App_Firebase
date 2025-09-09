@@ -69,8 +69,8 @@ const CategoryDropdown: React.FC = () => {
 
             <Container className='d-flex flex-wrap justify-content-center align-items-center m-3'>
                 <p className='mx-3 my-0'>Category:</p>
-                <DropdownButton title={selectedCategory} onSelect={handleSelect} variant="success">
-                    <Dropdown.Item key={0} eventKey="All">All</Dropdown.Item>
+                <DropdownButton id="category-dropdown" title={selectedCategory} onSelect={handleSelect} variant="success">
+                    <Dropdown.Item key={0} eventKey="All" id='category-all-option'>All</Dropdown.Item>
                     {categories.map((category: Category, index: number) => <Dropdown.Item key={index+1} eventKey={category.category}>{category.category}</Dropdown.Item>)}
                 </DropdownButton>
             </Container>

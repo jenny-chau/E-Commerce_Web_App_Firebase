@@ -1,7 +1,7 @@
 # Coins - React E-Commerce Web App - Firebase
 
 ## Introduction
-Coins is an online department store. Users are able to add products to populate the store. Items are categorized and can be added to your shopping cart for checkout. Items are not actually purchaseable.
+Coins is an online department store. Users are able to add products to populate the store. Items are categorized and can be added to your shopping cart for checkout. Items are not actually purchaseable. [App Link on Vercel](https://e-commerce-web-app-firebase.vercel.app/)
 
 ## Languages, Libraries, and Key Elements Used
 - Typescript for type checking to catch potential errors
@@ -12,6 +12,8 @@ Coins is an online department store. Users are able to add products to populate 
 - Firebase for managing users and user authentication
 - Firestore for storing product, shopping cart, user profile, and order data
 - sessionStorage stores user's shopping cart data until they logout
+- Jest and Babel for unit tests and integration tests
+- Github Actions for CI/CD to Vercel 
 
 ## Features
 - Login/Register

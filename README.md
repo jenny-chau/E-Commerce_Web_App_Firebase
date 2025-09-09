@@ -1,6 +1,6 @@
 # Coins - React E-Commerce Web App - Firebase
 
-# [App Hosted on Vercel](https://e-commerce-web-app-firebase.vercel.app/)
+## [App Link Hosted on Vercel](https://e-commerce-web-app-firebase.vercel.app/)
 
 ## Introduction
 Coins is an online department store. Users are able to add products to populate the store. Items are categorized and can be added to your shopping cart for checkout. Items are not actually purchaseable. 

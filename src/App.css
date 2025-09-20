@@ -16,6 +16,7 @@
 .profile_image, .add-product-image {
   max-height: 15em;
   max-width: 100%;
+  object-fit: contain;
 }
 
 .alert {

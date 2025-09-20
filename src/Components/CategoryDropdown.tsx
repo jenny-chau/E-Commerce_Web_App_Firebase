@@ -56,6 +56,7 @@ const CategoryDropdown: React.FC = () => {
     const handleShowAlert = (message: string) => {
         setAlertMessage(message);
         setShowAlert(true);
+        setSelectedCategory("All");
 
         // show alert of 5 seconds (users may also close the alert manually)
         setTimeout(() => {

@@ -56,8 +56,11 @@ const CategoryDropdown: React.FC = () => {
     const handleShowAlert = (message: string) => {
         setAlertMessage(message);
         setShowAlert(true);
-        setSelectedCategory("All");
-
+        if (message == "Successfully added product!") {
+            setSelectedCategory("All");
+        } else {
+            setSelectedCategory(selectedCategory);
+        }
         // show alert of 5 seconds (users may also close the alert manually)
         setTimeout(() => {
             setShowAlert(false);

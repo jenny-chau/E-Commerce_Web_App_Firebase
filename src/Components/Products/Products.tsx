@@ -30,8 +30,6 @@ const Products:React.FC<ProductProps> = ({category, showEditButtons, alertCallba
     const [noProducts, setNoProducts] = useState<boolean>(true);
 
     useEffect(() => {
-        setNoProducts(true);
-
         // determine firestore product reference based on whether a specific category is selected
         let productsRef;
         if (category == 'All') {
@@ -43,6 +41,9 @@ const Products:React.FC<ProductProps> = ({category, showEditButtons, alertCallba
 
         // Setup a listener to get the most up-to-date products when the user adds a new product
         const unsubscribe = onSnapshot(productsRef, (snapshot) => {
+            // set "No Products Found" message to show before any products are retrieved 
+            setNoProducts(true);
+
             const dataArray = snapshot.docs.map((doc) => ({
                 docID: doc.id,
                 ...doc.data(),
@@ -55,7 +56,7 @@ const Products:React.FC<ProductProps> = ({category, showEditButtons, alertCallba
             setProducts(dataArray);
             setLoading(false);
         });
-        
+
         return () => unsubscribe();
     }, [category]); // Reruns useEffect when category changes
         

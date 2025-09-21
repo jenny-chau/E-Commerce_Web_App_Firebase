@@ -44,6 +44,7 @@ const Products:React.FC<ProductProps> = ({category, showEditButtons, alertCallba
         // Setup a listener to get the most up-to-date products when the user adds a new product
         const unsubscribe = onSnapshot(productsRef, (snapshot) => {
             const dataArray = snapshot.docs.map((doc) => ({
+                docID: doc.id,
                 ...doc.data(),
             })) as Product[];
 
@@ -53,17 +54,18 @@ const Products:React.FC<ProductProps> = ({category, showEditButtons, alertCallba
             }
             setProducts(dataArray);
             setLoading(false);
-
+        });
+        
         return () => unsubscribe();
-    })}, [category]); // Reruns useEffect when category changes
+    }, [category]); // Reruns useEffect when category changes
         
     if (loading) return <p>Loading...</p>;
     if (noProducts) return <p>No Products Found</p>;
 
     return (
         <ul className='list-unstyled d-flex flex-wrap'>
-            {products.map((product, index) => (
-            <li key={index} className='my-2 w-100'>
+            {products.map((product) => (
+            <li key={product.docID} className='my-2 w-100'>
                 <ProductCard product={product} showEditButtons={showEditButtons} alertCallback={alertCallback}/>
             </li>
             ))}

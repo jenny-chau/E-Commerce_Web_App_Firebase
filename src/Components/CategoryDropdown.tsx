@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Container, Dropdown, DropdownButton } from "react-bootstrap";
-import Products from "./Products/Products";
+import Products, { type Product } from "./Products/Products";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import AddProduct from "./Products/AddProduct";
@@ -33,9 +33,10 @@ const CategoryDropdown: React.FC = () => {
 
             setCategories(dataArray);
             setLoading(false);
-
-            return () => unsubscribe();
-    })}, []);
+        });
+        
+        return () => unsubscribe();
+    }, []);
         
     if (loading) return <p>Loading...</p>;
 
@@ -53,14 +54,14 @@ const CategoryDropdown: React.FC = () => {
     }
 
     // handle showing a success alert 
-    const handleShowAlert = (message: string) => {
+    const handleShowAlert = (message: string, product?: Product) => {
+        // redirect to specific category of added product (or stay on 'All' products)
+        if (product && selectedCategory != "All") {
+            setSelectedCategory(product.category);
+        }
+        
         setAlertMessage(message);
         setShowAlert(true);
-        if (message == "Successfully added product!") {
-            setSelectedCategory("All");
-        } else {
-            setSelectedCategory(selectedCategory);
-        }
         // show alert of 5 seconds (users may also close the alert manually)
         setTimeout(() => {
             setShowAlert(false);

@@ -66,9 +66,10 @@ const ProductForm: React.FC<ProductFormProps> = ({callback, existingProduct, sub
 
             setCategories(dataArray);
             setLoading(false);
-
-            return () => unsubscribe();
-    })}, [existingProduct]); // rerun useEffect when the existingProduct changes
+        });
+        
+        return () => unsubscribe();
+    }, [existingProduct]); // rerun useEffect when the existingProduct changes
 
     const handleAddProduct = async (e: FormEvent) => {
             e.preventDefault();

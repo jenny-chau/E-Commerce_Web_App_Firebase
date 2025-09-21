@@ -6,7 +6,7 @@ import type { Product } from "./Products";
 import ProductForm from "./ProductForm";
 
 interface AddProductProps {
-    callback: (message: string) => void;
+    callback: (message: string, product?: Product) => void;
 }
 
 const AddProduct: React.FC<AddProductProps> = ({callback}) => {
@@ -31,7 +31,7 @@ const AddProduct: React.FC<AddProductProps> = ({callback}) => {
             handleHide();
 
             // callback to show the alert in the CategoryDropdown component 
-            callback('Successfully added product!');
+            callback('Successfully added product!', product);
         } catch (err: any) {
             setError(err);
         }

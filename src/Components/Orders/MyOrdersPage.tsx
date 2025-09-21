@@ -36,9 +36,9 @@ const MyOrdersPage: React.FC = () => {
                 
                 setOrders(dataArray);
                 setLoading(false);
+            });
             
-                return () => unsubscribe();
-            })
+            return () => unsubscribe();
         } else {
             setError("No user found");
         }

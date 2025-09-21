@@ -67,7 +67,7 @@ describe('AddProduct', () => {
 
         // wait for parent callback to be called
         await waitFor(() => 
-            expect(parentCallback).toHaveBeenCalledWith('Successfully added product!')
+            expect(parentCallback).toHaveBeenCalledWith('Successfully added product!', {"category": "", "description": "", "docID": "", "image": "", "price": 0, "rating": {"count": 0, "rate": 0}, "title": ""})
         )
     });
 
